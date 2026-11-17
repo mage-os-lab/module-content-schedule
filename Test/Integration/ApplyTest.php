@@ -84,8 +84,11 @@ class ApplyTest extends TestCase
 
     /**
      * A page that cannot be saved (numeric URL key) is skipped, and the block after it is still published.
+     *
+     * No DB isolation: inside the test transaction, the page's rolled-back save would make the block's save fail too.
      */
     #[
+        DbIsolation(false),
         DataFixture(PageFixture::class, ['active' => false], 'page'),
         DataFixture(BlockFixture::class, ['active' => false], 'block'),
     ]

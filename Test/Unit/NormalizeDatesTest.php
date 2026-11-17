@@ -27,13 +27,19 @@ class NormalizeDatesTest extends TestCase
     }
 
     /**
-     * A value already in the column format is kept as is, so saving twice does not shift it.
+     * A value already in the column format is kept as is, so saving twice does not shift it, whatever PHP's time zone.
      */
     public function testStoredValueIsKept(): void
     {
         $block = new DataObject(['publish_at' => '2026-12-01 07:30:00', 'unpublish_at' => '']);
+        $timezone = date_default_timezone_get();
+        date_default_timezone_set('America/Los_Angeles');
 
-        (new NormalizeDates())->execute(new Observer(['object' => $block]));
+        try {
+            (new NormalizeDates())->execute(new Observer(['object' => $block]));
+        } finally {
+            date_default_timezone_set($timezone);
+        }
 
         $this->assertSame('2026-12-01 07:30:00', $block->getData('publish_at'));
         $this->assertNull($block->getData('unpublish_at'));
