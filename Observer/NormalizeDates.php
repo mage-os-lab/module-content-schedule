@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace MageOS\ContentSchedule\Observer;
 
+use DateTimeImmutable;
+use DateTimeZone;
+use Exception;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -14,15 +17,22 @@ class NormalizeDates implements ObserverInterface
     /**
      * The admin date-time field posts a UTC ISO 8601 string, the column wants "Y-m-d H:i:s"; invalid dates are cleared.
      *
+     * A value without an offset (already in the column format) is read as UTC, whatever PHP's default time zone.
+     *
      * @param Observer $observer
      */
     public function execute(Observer $observer): void
     {
         $object = $observer->getData('object');
+        $utc = new DateTimeZone('UTC');
         foreach (['publish_at', 'unpublish_at'] as $field) {
             $value = $object->getData($field);
-            $time = $value ? strtotime((string) $value) : false;
-            $object->setData($field, $time === false ? null : gmdate('Y-m-d H:i:s', $time));
+            try {
+                $date = $value ? new DateTimeImmutable((string) $value, $utc) : null;
+            } catch (Exception) {
+                $date = null;
+            }
+            $object->setData($field, $date?->setTimezone($utc)->format('Y-m-d H:i:s'));
         }
     }
 }

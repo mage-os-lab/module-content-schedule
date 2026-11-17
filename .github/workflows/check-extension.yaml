@@ -38,5 +38,6 @@ jobs:
           coverage: none
       - name: Resolve dependencies without installing them
         run: composer update --no-install --no-interaction --no-progress
+      # abandoned packages come from Magento itself; only security advisories fail the job
       - name: Audit resolved dependencies
-        run: composer audit --locked --no-dev
+        run: composer audit --locked --no-dev --abandoned=report
