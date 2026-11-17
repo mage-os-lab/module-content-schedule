@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="cms_page">
+        <column xsi:type="datetime" name="publish_at" nullable="true" comment="Enable at (UTC)"/>
+        <column xsi:type="datetime" name="unpublish_at" nullable="true" comment="Disable at (UTC)"/>
+    </table>
+    <table name="cms_block">
+        <column xsi:type="datetime" name="publish_at" nullable="true" comment="Enable at (UTC)"/>
+        <column xsi:type="datetime" name="unpublish_at" nullable="true" comment="Disable at (UTC)"/>
+    </table>
+</schema>

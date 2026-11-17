@@ -1,0 +1,14 @@
+{
+    "cms_page": {
+        "column": {
+            "publish_at": true,
+            "unpublish_at": true
+        }
+    },
+    "cms_block": {
+        "column": {
+            "publish_at": true,
+            "unpublish_at": true
+        }
+    }
+}
