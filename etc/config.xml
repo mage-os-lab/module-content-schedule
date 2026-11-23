@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <cms>
+            <mageos_content_schedule>
+                <redirect>0</redirect>
+                <notify>0</notify>
+                <notify_identity>general</notify_identity>
+                <notify_template>cms_mageos_content_schedule_notify_template</notify_template>
+            </mageos_content_schedule>
+        </cms>
+    </default>
+</config>

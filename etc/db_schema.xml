@@ -4,6 +4,7 @@
     <table name="cms_page">
         <column xsi:type="datetime" name="publish_at" nullable="true" comment="Enable at (UTC)"/>
         <column xsi:type="datetime" name="unpublish_at" nullable="true" comment="Disable at (UTC)"/>
+        <column xsi:type="varchar" name="redirect_to" length="255" nullable="true" comment="301 target when disabled"/>
     </table>
     <table name="cms_block">
         <column xsi:type="datetime" name="publish_at" nullable="true" comment="Enable at (UTC)"/>

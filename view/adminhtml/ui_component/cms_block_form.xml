@@ -11,6 +11,7 @@
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">Publish at</label>
+                <notice translate="true">In the admin time zone. Applied by cron within a minute of the date.</notice>
                 <dataScope>publish_at</dataScope>
             </settings>
             <formElements>
@@ -32,6 +33,7 @@
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">Unpublish at</label>
+                <notice translate="true">In the admin time zone. Applied by cron within a minute of the date.</notice>
                 <dataScope>unpublish_at</dataScope>
             </settings>
             <formElements>

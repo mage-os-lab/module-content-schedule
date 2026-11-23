@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="cms">
+            <group id="mageos_content_schedule" translate="label" sortOrder="200" showInDefault="1"
+                   showInWebsite="0" showInStore="0">
+                <label>Content Schedule</label>
+                <field id="redirect" translate="label comment" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Redirect Disabled Pages</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Adds a "Redirect when disabled" field to CMS pages: a disabled page with a target answers with a 301 redirect instead of a 404.</comment>
+                </field>
+                <field id="notify" translate="label comment" type="select" sortOrder="20" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>E-mail a Summary</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>After each cron run that publishes or unpublishes something, or fails to.</comment>
+                </field>
+                <field id="notify_to" translate="label comment" type="text" sortOrder="30" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Send To</label>
+                    <comment>Comma-separated e-mail addresses.</comment>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="notify">1</field>
+                    </depends>
+                </field>
+                <field id="notify_identity" translate="label" type="select" sortOrder="40" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Sender</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
+                    <depends>
+                        <field id="notify">1</field>
+                    </depends>
+                </field>
+                <field id="notify_template" translate="label" type="select" sortOrder="50" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>E-mail Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                    <depends>
+                        <field id="notify">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

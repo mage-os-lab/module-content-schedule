@@ -1,0 +1,42 @@
+<?php
+/**
+ * "Scheduled Content" page: the dates still to apply, soonest first.
+ *
+ * @var \Magento\Backend\Block\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+/** @var \MageOS\ContentSchedule\ViewModel\Upcoming $viewModel */
+$viewModel = $block->getData('view_model');
+$rows = $viewModel->getRows();
+?>
+<?php if (!$rows): ?>
+    <div class="message message-notice"><?= $escaper->escapeHtml(__('No page or block is scheduled.')) ?></div>
+<?php else: ?>
+    <table class="data-grid">
+        <thead>
+        <tr>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Date')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Action')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Type')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Title')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Identifier')) ?></th>
+            <th class="data-grid-th"><?= $escaper->escapeHtml(__('Status')) ?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($rows as $row): ?>
+            <tr>
+                <td><?= $escaper->escapeHtml($row['date']) ?></td>
+                <td><?= $escaper->escapeHtml($row['action']) ?></td>
+                <td><?= $escaper->escapeHtml($row['type']) ?></td>
+                <td>
+                    <a href="<?= $escaper->escapeUrl($row['url']) ?>"><?= $escaper->escapeHtml($row['title']) ?></a>
+                </td>
+                <td><?= $escaper->escapeHtml($row['identifier']) ?></td>
+                <td><?= $escaper->escapeHtml($row['active'] ? __('Enabled') : __('Disabled')) ?></td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>

@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
         <job name="mageos_content_schedule_apply" instance="MageOS\ContentSchedule\Cron\Apply" method="execute">
-            <schedule>*/5 * * * *</schedule>
+            <schedule>* * * * *</schedule>
         </job>
     </group>
 </config>

@@ -2,7 +2,8 @@
     "cms_page": {
         "column": {
             "publish_at": true,
-            "unpublish_at": true
+            "unpublish_at": true,
+            "redirect_to": true
         }
     },
     "cms_block": {

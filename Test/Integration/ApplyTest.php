@@ -9,14 +9,16 @@ use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Test\Fixture\Block as BlockFixture;
 use Magento\Cms\Test\Fixture\Page as PageFixture;
 use Magento\Framework\App\ResourceConnection;
+use Magento\TestFramework\Fixture\Config;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Tests that the cron publishes and unpublishes CMS pages at their dates.
+ * Tests that the cron publishes and unpublishes CMS pages and blocks at their dates.
  */
 #[DbIsolation(true)]
 class ApplyTest extends TestCase
@@ -48,6 +50,36 @@ class ApplyTest extends TestCase
 
         $page = Bootstrap::getObjectManager()->get(PageRepositoryInterface::class)->getById($pageId);
         $this->assertFalse((bool) $page->isActive());
+    }
+
+    /**
+     * A disabled block whose "Publish at" is past is enabled, and the date is cleared.
+     */
+    #[DataFixture(BlockFixture::class, ['active' => false], 'block')]
+    public function testBlockIsPublishedAndItsDateCleared(): void
+    {
+        $blockId = $this->schedule('publish_at', 'block');
+
+        Bootstrap::getObjectManager()->get(Apply::class)->execute();
+
+        $block = Bootstrap::getObjectManager()->get(BlockRepositoryInterface::class)->getById($blockId);
+        $this->assertTrue((bool) $block->isActive());
+        $this->assertNull($block->getData('publish_at'));
+    }
+
+    /**
+     * An enabled block whose "Unpublish at" is past is disabled, and the date is cleared.
+     */
+    #[DataFixture(BlockFixture::class, ['active' => true], 'block')]
+    public function testBlockIsUnpublished(): void
+    {
+        $blockId = $this->schedule('unpublish_at', 'block');
+
+        Bootstrap::getObjectManager()->get(Apply::class)->execute();
+
+        $block = Bootstrap::getObjectManager()->get(BlockRepositoryInterface::class)->getById($blockId);
+        $this->assertFalse((bool) $block->isActive());
+        $this->assertNull($block->getData('unpublish_at'));
     }
 
     /**
@@ -103,12 +135,35 @@ class ApplyTest extends TestCase
             ['page_id = ?' => $pageId]
         );
 
-        Bootstrap::getObjectManager()->get(Apply::class)->execute();
+        $failed = Bootstrap::getObjectManager()->get(Apply::class)->execute();
 
+        $this->assertSame(1, $failed);
         $block = Bootstrap::getObjectManager()->get(BlockRepositoryInterface::class)->getById($blockId);
         $this->assertTrue((bool) $block->isActive());
         $page = Bootstrap::getObjectManager()->get(PageRepositoryInterface::class)->getById($pageId);
         $this->assertFalse((bool) $page->isActive());
+    }
+
+    /**
+     * Notifying on: one summary e-mail lists the published page.
+     */
+    #[
+        Config('cms/mageos_content_schedule/notify', '1'),
+        Config('cms/mageos_content_schedule/notify_to', 'editor@example.com'),
+        DataFixture(PageFixture::class, ['active' => false, 'title' => 'Summer <sale>'], 'page'),
+    ]
+    public function testSummaryIsEmailed(): void
+    {
+        $this->schedule('publish_at');
+
+        Bootstrap::getObjectManager()->get(Apply::class)->execute();
+
+        $message = Bootstrap::getObjectManager()->get(TransportBuilderMock::class)->getSentMessage();
+        $this->assertNotNull($message);
+        $this->assertSame('editor@example.com', $message->getTo()[0]->getEmail());
+        $body = quoted_printable_decode($message->getBody()->bodyToString());
+        $this->assertStringContainsString('Summer &lt;sale&gt;', $body);
+        $this->assertStringContainsString('published', $body);
     }
 
     /**

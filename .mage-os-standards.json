@@ -27,7 +27,7 @@
     }
   },
   "notes": [
-    "Integration tests (Test/Integration) were written for the check-extension CI and not run locally; unit tests, PHPStan level 8 and PHPCS pass locally.",
+    "Integration tests (Test/Integration) pass locally (2026-11-23, Mage-OS 4.0.0, PHP 8.5); unit tests, PHPStan level 8 and PHPCS pass locally.",
     "CI not run yet: the repository has no GitHub remote."
   ]
 }

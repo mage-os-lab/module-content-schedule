@@ -1,0 +1,24 @@
+<!--@subject {{trans "Content schedule: %count change(s)" count=$count}} @-->
+<!--@vars {
+"var count":"Number of changes and failures",
+"var changes":"Pages and blocks published or unpublished",
+"var change.text":"One change (already HTML-escaped)",
+"var failures":"Pages and blocks that could not be saved",
+"var failure.text":"One failure (already HTML-escaped)"
+} @-->
+{{if has_changes}}
+<p>{{trans "The content schedule has applied these dates:"}}</p>
+<ul>
+    {{for change in changes}}
+    <li>{{var change.text}}</li>
+    {{/for}}
+</ul>
+{{/if}}
+{{if has_failures}}
+<p>{{trans "These pages and blocks could not be saved; the details are in the log:"}}</p>
+<ul>
+    {{for failure in failures}}
+    <li>{{var failure.text}}</li>
+    {{/for}}
+</ul>
+{{/if}}
