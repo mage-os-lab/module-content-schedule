@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 
 /**
- * Tests that a disabled CMS page with a "Redirect when disabled" target answers with a 301.
+ * Tests that a disabled CMS page with a "Redirect when disabled" target answers with a redirect.
  */
 #[DbIsolation(true), AppArea('frontend')]
 class RedirectTest extends AbstractController
@@ -35,6 +35,40 @@ class RedirectTest extends AbstractController
 
         $this->assertSame(301, $this->getResponse()->getHttpResponseCode());
         $this->assertRedirect($this->stringEndsWith('/summer-sale'));
+    }
+
+    /**
+     * Redirect type set to temporary: the disabled page answers with a 302.
+     */
+    #[
+        Config('cms/mageos_content_schedule/redirect', '1'),
+        Config('cms/mageos_content_schedule/redirect_code', '302'),
+        DataFixture(PageFixture::class, ['active' => false, 'identifier' => 'schedule-redirect-302'], 'page'),
+    ]
+    public function testRedirectIsTemporaryWhenConfigured(): void
+    {
+        $this->setTarget('summer-sale');
+
+        $this->dispatch('/schedule-redirect-302');
+
+        $this->assertSame(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertRedirect($this->stringEndsWith('/summer-sale'));
+    }
+
+    /**
+     * A page whose target is its own URL (set before 1.2, or straight in the database) is a 404, not a loop.
+     */
+    #[
+        Config('cms/mageos_content_schedule/redirect', '1'),
+        DataFixture(PageFixture::class, ['active' => false, 'identifier' => 'schedule-redirect-self'], 'page'),
+    ]
+    public function testPageDoesNotRedirectToItself(): void
+    {
+        $this->setTarget('schedule-redirect-self');
+
+        $this->dispatch('/schedule-redirect-self');
+
+        $this->assertSame(404, $this->getResponse()->getHttpResponseCode());
     }
 
     /**

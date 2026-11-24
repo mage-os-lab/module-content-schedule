@@ -5,5 +5,9 @@
         <job name="mageos_content_schedule_apply" instance="MageOS\ContentSchedule\Cron\Apply" method="execute">
             <schedule>* * * * *</schedule>
         </job>
+        <!-- Daily, in the time zone of the default config scope, as every Magento cron schedule -->
+        <job name="mageos_content_schedule_remind" instance="MageOS\ContentSchedule\Cron\Remind" method="execute">
+            <schedule>0 7 * * *</schedule>
+        </job>
     </group>
 </config>

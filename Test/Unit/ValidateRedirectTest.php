@@ -45,6 +45,18 @@ class ValidateRedirectTest extends TestCase
     }
 
     /**
+     * A page that redirects to its own URL key would loop: refused, whatever the case or slashes.
+     */
+    public function testRedirectToThePageItselfIsRefused(): void
+    {
+        $page = new DataObject(['identifier' => 'summer-sale', 'redirect_to' => '/Summer-Sale/']);
+
+        $this->expectException(LocalizedException::class);
+
+        (new ValidateRedirect())->execute(new Observer(['object' => $page]));
+    }
+
+    /**
      * Valid inputs and what is stored.
      *
      * @return array<string,array{string,string|null}>

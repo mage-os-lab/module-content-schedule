@@ -55,7 +55,7 @@
             <settings>
                 <dataType>text</dataType>
                 <label translate="true">Redirect when disabled</label>
-                <notice translate="true">A path such as summer-sale or a full URL. While the page is disabled, its URL redirects there (301).</notice>
+                <notice translate="true">A path such as summer-sale or a full URL. While the page is disabled, its URL redirects there.</notice>
                 <dataScope>redirect_to</dataScope>
             </settings>
         </field>

@@ -6,6 +6,7 @@ namespace MageOS\ContentSchedule\Test\Unit;
 use MageOS\ContentSchedule\Observer\NormalizeDates;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\LocalizedException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,16 +15,28 @@ use PHPUnit\Framework\TestCase;
 class NormalizeDatesTest extends TestCase
 {
     /**
-     * UTC ISO 8601 values from the admin form are stored as UTC "Y-m-d H:i:s"; empty and invalid values are cleared.
+     * UTC ISO 8601 values from the admin form are stored as UTC "Y-m-d H:i:s"; empty values are cleared.
      */
-    public function testDatesAreStoredAsUtcAndInvalidOnesCleared(): void
+    public function testDatesAreStoredAsUtcAndEmptyOnesCleared(): void
     {
-        $page = new DataObject(['publish_at' => '2026-12-01T08:30:00+01:00', 'unpublish_at' => 'not a date']);
+        $page = new DataObject(['publish_at' => '2026-12-01T08:30:00+01:00', 'unpublish_at' => '']);
 
         (new NormalizeDates())->execute(new Observer(['object' => $page]));
 
         $this->assertSame('2026-12-01 07:30:00', $page->getData('publish_at'));
         $this->assertNull($page->getData('unpublish_at'));
+    }
+
+    /**
+     * An invalid date refuses the save instead of silently dropping the schedule.
+     */
+    public function testInvalidDateIsRefused(): void
+    {
+        $page = new DataObject(['publish_at' => 'not a date']);
+
+        $this->expectException(LocalizedException::class);
+
+        (new NormalizeDates())->execute(new Observer(['object' => $page]));
     }
 
     /**

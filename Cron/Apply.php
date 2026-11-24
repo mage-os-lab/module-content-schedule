@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace MageOS\ContentSchedule\Cron;
 
+use Exception;
 use MageOS\ContentSchedule\Model\Notifier;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
@@ -42,7 +43,8 @@ class Apply
     /**
      * Apply the due dates of every CMS page and block, saving each entity once, then e-mail the summary.
      *
-     * An entity that cannot be saved is logged and skipped, so it does not hold back the others.
+     * An entity that cannot be saved, whatever the exception, is logged and skipped, so it does not hold back the
+     * others; it is tried again at each run, and the notifier e-mails it once.
      *
      * @return int The number of pages and blocks that could not be saved
      */
@@ -55,24 +57,34 @@ class Apply
         foreach ($this->pages->create()->addFieldToFilter(self::FIELDS, $due)->getAllIds() as $id) {
             try {
                 $page = $this->pageRepository->getById($id);
-                if ($page instanceof Page && $this->schedule($page, $now)) {
+                if (!$page instanceof Page) {
+                    throw new LocalizedException(
+                        __('Not a core CMS model (%1): the schedule cannot be applied.', $page::class)
+                    );
+                }
+                if ($this->schedule($page, $now)) {
                     $this->pageRepository->save($page);
                     $changes[] = $this->describe(__('CMS page'), $page);
                 }
-            } catch (LocalizedException $e) {
-                $failures[] = sprintf('%s %s: %s', __('CMS page'), $id, $e->getMessage());
+            } catch (Exception $e) {
+                $failures['page:' . $id] = sprintf('%s %s: %s', __('CMS page'), $id, $e->getMessage());
                 $this->logger->error(sprintf('Content schedule: CMS page %s not saved: %s', $id, $e->getMessage()));
             }
         }
         foreach ($this->blocks->create()->addFieldToFilter(self::FIELDS, $due)->getAllIds() as $id) {
             try {
                 $block = $this->blockRepository->getById($id);
-                if ($block instanceof Block && $this->schedule($block, $now)) {
+                if (!$block instanceof Block) {
+                    throw new LocalizedException(
+                        __('Not a core CMS model (%1): the schedule cannot be applied.', $block::class)
+                    );
+                }
+                if ($this->schedule($block, $now)) {
                     $this->blockRepository->save($block);
                     $changes[] = $this->describe(__('CMS block'), $block);
                 }
-            } catch (LocalizedException $e) {
-                $failures[] = sprintf('%s %s: %s', __('CMS block'), $id, $e->getMessage());
+            } catch (Exception $e) {
+                $failures['block:' . $id] = sprintf('%s %s: %s', __('CMS block'), $id, $e->getMessage());
                 $this->logger->error(sprintf('Content schedule: CMS block %s not saved: %s', $id, $e->getMessage()));
             }
         }

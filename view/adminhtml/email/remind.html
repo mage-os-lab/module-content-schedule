@@ -1,0 +1,12 @@
+<!--@subject {{trans "Content schedule: %count date(s) in the next 24 hours" count=$count}} @-->
+<!--@vars {
+"var count":"Number of dates",
+"var lines":"Dates to apply in the next 24 hours, soonest first",
+"var line.text":"One date (already HTML-escaped)"
+} @-->
+<p>{{trans "These dates will be applied in the next 24 hours:"}}</p>
+<ul>
+    {{for line in lines}}
+    <li>{{var line.text}}</li>
+    {{/for}}
+</ul>

@@ -10,13 +10,22 @@
                        showInWebsite="0" showInStore="0">
                     <label>Redirect Disabled Pages</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Adds a "Redirect when disabled" field to CMS pages: a disabled page with a target answers with a 301 redirect instead of a 404.</comment>
+                    <comment>Adds a "Redirect when disabled" field to CMS pages: a disabled page with a target answers with a redirect instead of a 404.</comment>
+                </field>
+                <field id="redirect_code" translate="label comment" type="select" sortOrder="15" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Redirect Type</label>
+                    <source_model>MageOS\ContentSchedule\Model\Source\RedirectCode</source_model>
+                    <comment>Choose temporary when pages are published again later: browsers remember a permanent redirect.</comment>
+                    <depends>
+                        <field id="redirect">1</field>
+                    </depends>
                 </field>
                 <field id="notify" translate="label comment" type="select" sortOrder="20" showInDefault="1"
                        showInWebsite="0" showInStore="0">
                     <label>E-mail a Summary</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>After each cron run that publishes or unpublishes something, or fails to.</comment>
+                    <comment>After each cron run that publishes or unpublishes something, or fails to. A page or block that keeps failing is reported once.</comment>
                 </field>
                 <field id="notify_to" translate="label comment" type="text" sortOrder="30" showInDefault="1"
                        showInWebsite="0" showInStore="0">
@@ -41,6 +50,24 @@
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                     <depends>
                         <field id="notify">1</field>
+                    </depends>
+                </field>
+                <field id="remind" translate="label comment" type="select" sortOrder="60" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>E-mail a Daily Reminder</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Every day at 7:00, admin time zone: the dates that will be applied in the next 24 hours.</comment>
+                    <depends>
+                        <field id="notify">1</field>
+                    </depends>
+                </field>
+                <field id="remind_template" translate="label" type="select" sortOrder="70" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Reminder E-mail Template</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                    <depends>
+                        <field id="notify">1</field>
+                        <field id="remind">1</field>
                     </depends>
                 </field>
             </group>

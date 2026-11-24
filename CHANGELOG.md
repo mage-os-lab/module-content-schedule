@@ -2,6 +2,25 @@
 
 All notable changes to this module are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- *Redirect Type* setting (*Content Management > Content Schedule*): the redirect of a disabled page is permanent (301, as before) or temporary (302). Choose 302 for pages that are published again later, since browsers remember a 301.
+- *E-mail a Daily Reminder* setting: every day at 7:00, one e-mail lists the dates that will be applied in the next 24 hours. Off by default; it uses the addresses and sender of the summary, and its own template.
+
+### Changed
+
+- A page or block that keeps failing is e-mailed once instead of at every cron run (every minute). It is still tried and logged at each run, and e-mailed again if it fails after having worked.
+- A schedule date that is not a valid date now refuses the save, with a message, instead of being cleared silently.
+- A page can no longer be saved with its own URL key as *Redirect when disabled*.
+
+### Fixed
+
+- An unexpected error while saving one page or block no longer stops the cron run before the others and the summary e-mail.
+- A page or block whose model is replaced by another module is reported as a failure instead of being skipped silently at every run.
+- A disabled page whose redirect target is its own URL answers with the 404 instead of redirecting in a loop.
+
 ## [1.1.0] - 2026-11-23
 
 ### Added
