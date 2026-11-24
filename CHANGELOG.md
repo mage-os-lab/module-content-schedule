@@ -2,7 +2,9 @@
 
 All notable changes to this module are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.2.0] - 2026-11-24
+
+The redirect of a disabled page can be temporary, a daily e-mail announces the dates of the next 24 hours, and a page that keeps failing is e-mailed once instead of every minute.
 
 ### Added
 
