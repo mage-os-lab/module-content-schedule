@@ -57,10 +57,13 @@ class RemindTest extends TestCase
     public function testNoReminderWhenTurnedOff(): void
     {
         $this->schedule('page', 7200);
+        // The mail mock is shared and keeps the message of an earlier test: compare, do not expect null.
+        $mail = Bootstrap::getObjectManager()->get(TransportBuilderMock::class);
+        $before = $mail->getSentMessage();
 
         Bootstrap::getObjectManager()->get(Remind::class)->execute();
 
-        $this->assertNull(Bootstrap::getObjectManager()->get(TransportBuilderMock::class)->getSentMessage());
+        $this->assertSame($before, $mail->getSentMessage());
     }
 
     /**
