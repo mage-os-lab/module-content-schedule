@@ -2,11 +2,11 @@
 
 All notable changes to this module are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.3.0] - 2026-11-28
 
 Pages and blocks can be scheduled in bulk, every date applied is logged in the admin, and *Scheduled Content* becomes a grid with filters and paging.
 
-After the update: give the roles that should read the log the new ACL resource *Content > Elements > Content Schedule Log*.
+Upgrade: give the roles that should read the log the new ACL resource *Content > Elements > Content Schedule Log*.
 
 ### Added
 
