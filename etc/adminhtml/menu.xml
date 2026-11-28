@@ -5,5 +5,8 @@
         <add id="MageOS_ContentSchedule::upcoming" title="Scheduled Content" translate="title"
              module="MageOS_ContentSchedule" sortOrder="35" parent="Magento_Backend::content_elements"
              action="mageos_schedule/schedule/index" resource="MageOS_ContentSchedule::upcoming"/>
+        <add id="MageOS_ContentSchedule::log" title="Content Schedule Log" translate="title"
+             module="MageOS_ContentSchedule" sortOrder="36" parent="Magento_Backend::content_elements"
+             action="mageos_schedule/log/index" resource="MageOS_ContentSchedule::log"/>
     </menu>
 </config>

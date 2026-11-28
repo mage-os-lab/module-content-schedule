@@ -3,11 +3,7 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block name="mageos_content_schedule_upcoming" template="MageOS_ContentSchedule::upcoming.phtml">
-                <arguments>
-                    <argument name="view_model" xsi:type="object">MageOS\ContentSchedule\ViewModel\Upcoming</argument>
-                </arguments>
-            </block>
+            <uiComponent name="mageos_content_schedule_upcoming_listing"/>
         </referenceContainer>
     </body>
 </page>

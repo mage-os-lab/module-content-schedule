@@ -117,10 +117,7 @@ class RedirectDisabledPageTest extends TestCase
         $request = $this->createStub(Http::class);
         $request->method('getParam')->willReturn('5');
         $request->method('getOriginalPathInfo')->willReturn($requestedPath);
-        $view = $this->createStub(View::class);
-        $view->method('getRequest')->willReturn($request);
-
-        return (new RedirectDisabledPage($config, $pages, $factory, $url, $stores))
-            ->afterExecute($view, $this->createStub(Forward::class));
+        return (new RedirectDisabledPage($config, $pages, $factory, $url, $stores, $request))
+            ->afterExecute($this->createStub(View::class), $this->createStub(Forward::class));
     }
 }

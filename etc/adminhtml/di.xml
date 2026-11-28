@@ -5,4 +5,48 @@
         <plugin name="mageos_content_schedule_redirect_field"
                 type="MageOS\ContentSchedule\Plugin\HideRedirectField"/>
     </type>
+    <virtualType name="MageOS\ContentSchedule\Ui\DataProvider\Upcoming"
+                 type="MageOS\ContentSchedule\Ui\DataProvider\Listing">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">MageOS\ContentSchedule\Model\ResourceModel\Upcoming\Collection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MageOS\ContentSchedule\Ui\DataProvider\Log"
+                 type="MageOS\ContentSchedule\Ui\DataProvider\Listing">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">MageOS\ContentSchedule\Model\ResourceModel\Log\Collection</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MageOS\ContentSchedule\Model\Source\EntityType" type="MageOS\ContentSchedule\Model\Source\Options">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="page" xsi:type="string" translate="true">Page</item>
+                <item name="block" xsi:type="string" translate="true">Block</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MageOS\ContentSchedule\Model\Source\Action" type="MageOS\ContentSchedule\Model\Source\Options">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="publish" xsi:type="string" translate="true">Publish</item>
+                <item name="unpublish" xsi:type="string" translate="true">Unpublish</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MageOS\ContentSchedule\Model\Source\Result" type="MageOS\ContentSchedule\Model\Source\Options">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="success" xsi:type="string" translate="true">Applied</item>
+                <item name="failure" xsi:type="string" translate="true">Failed</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="MageOS\ContentSchedule\Model\Source\RunBy" type="MageOS\ContentSchedule\Model\Source\Options">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="cron" xsi:type="string" translate="true">Cron job</item>
+                <item name="cli" xsi:type="string" translate="true">Command line</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

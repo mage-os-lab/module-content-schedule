@@ -33,13 +33,15 @@ class RedirectDisabledPage
      * @param RedirectFactory $redirectFactory
      * @param UrlInterface $url
      * @param StoreManagerInterface $storeManager
+     * @param Http $request
      */
     public function __construct(
         private readonly ScopeConfigInterface $config,
         private readonly PageRepositoryInterface $pageRepository,
         private readonly RedirectFactory $redirectFactory,
         private readonly UrlInterface $url,
-        private readonly StoreManagerInterface $storeManager
+        private readonly StoreManagerInterface $storeManager,
+        private readonly Http $request
     ) {
     }
 
@@ -57,9 +59,9 @@ class RedirectDisabledPage
      */
     public function afterExecute(View $subject, ResultInterface $result): ResultInterface
     {
-        $request = $subject->getRequest();
+        $request = $this->request;
         $id = $request->getParam('page_id') ?? $request->getParam('id');
-        if (!$result instanceof Forward || !$request instanceof Http || !$id
+        if (!$result instanceof Forward || !$id
             || !$this->config->isSetFlag(self::CONFIG_PATH)
         ) {
             return $result;

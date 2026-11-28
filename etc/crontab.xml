@@ -5,9 +5,13 @@
         <job name="mageos_content_schedule_apply" instance="MageOS\ContentSchedule\Cron\Apply" method="execute">
             <schedule>* * * * *</schedule>
         </job>
-        <!-- Daily, in the time zone of the default config scope, as every Magento cron schedule -->
+        <!-- Hourly: the reminder of a day leaves at 7:00 (admin time zone, see Notifier::remind()); the other runs
+             send nothing unless it could not be sent, and then retry it, night included, until it is sent -->
         <job name="mageos_content_schedule_remind" instance="MageOS\ContentSchedule\Cron\Remind" method="execute">
-            <schedule>0 7 * * *</schedule>
+            <schedule>0 * * * *</schedule>
+        </job>
+        <job name="mageos_content_schedule_clean_log" instance="MageOS\ContentSchedule\Cron\CleanLog" method="execute">
+            <schedule>30 3 * * *</schedule>
         </job>
     </group>
 </config>

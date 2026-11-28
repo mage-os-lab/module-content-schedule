@@ -2,6 +2,32 @@
 
 All notable changes to this module are documented here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+Pages and blocks can be scheduled in bulk, every date applied is logged in the admin, and *Scheduled Content* becomes a grid with filters and paging.
+
+After the update: give the roles that should read the log the new ACL resource *Content > Elements > Content Schedule Log*.
+
+### Added
+
+- *Schedule* mass action in the CMS page and block grids: the same *Publish at* and/or *Unpublish at* for all selected items; a date left empty keeps each item's own (ACL: the same resources as the core mass actions).
+- *Content > Elements > Content Schedule Log*: every date applied, with when, who ran it (cron job or command line), the page or block, the action and the result with its error message; filters and paging. A page or block that keeps failing is logged once, not every minute.
+- *Keep Log For (Days)* setting (*Content Management > Content Schedule*, default 90): a nightly job deletes older log entries; 0 keeps them.
+
+### Changed
+
+- *Content > Elements > Scheduled Content* is now an admin grid: filters on date, action, type, title, identifier and status, sorting, paging, column controls, and an *Edit* link per row.
+- Saving many items with a past date shows the "already past" warning once instead of once per item.
+
+### Fixed
+
+- A daily reminder that could not be sent (mail server down) is no longer lost: it is tried again every hour, night included, until it is sent, and sent once. The reminder job now runs every hour; the reminder still leaves at 7:00.
+- A summary e-mail that could not be sent is no longer lost: its changes are added to the next summary.
+- The lines of the summary and reminder e-mails ("Publish: CMS page …", "published") are in the language of the e-mail, like its subject, instead of English when sent by cron or the command line.
+- The error of a page or block that could not be saved is translated in the failure e-mail when Magento has a translation for it, instead of staying in English.
+- The subject of the summary e-mail counts changes and failures apart: an e-mail of failures only reads "1 page(s) or block(s) not saved", no longer "1 change(s)". A custom copy of the *Content Schedule* e-mail template keeps its old subject; use the new variable `summary` to get it.
+- `bin/magento content-schedule:run` sends the summary e-mail, as the cron job does; it failed with "Required parameter 'theme_dir' was not passed".
+
 ## [1.2.0] - 2026-11-24
 
 The redirect of a disabled page can be temporary, a daily e-mail announces the dates of the next 24 hours, and a page that keeps failing is e-mailed once instead of every minute.
