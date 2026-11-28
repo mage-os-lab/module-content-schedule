@@ -13,6 +13,9 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 /**
  * Once a day, e-mails the publish / unpublish dates that will be applied in the next 24 hours.
+ *
+ * The job runs every hour: the reminder leaves at 7:00, and one that could not be sent is tried again at each
+ * next run, night included, until it is sent (see Notifier::remind()).
  */
 class Remind
 {
@@ -33,11 +36,21 @@ class Remind
     }
 
     /**
-     * List the dates after now and up to 24 hours from now, soonest first, in the admin time zone.
-     *
-     * Dates already due are left out: the "apply" job handles them within a minute and reports its failures.
+     * E-mail the reminder of the day if it is due and not sent yet; its lines are built when it is sent.
      */
     public function execute(): void
+    {
+        $this->notifier->remind(fn (): array => $this->lines(), $this->timezone->date()->format('Y-m-d H:i'));
+    }
+
+    /**
+     * The dates after now and up to 24 hours from now, soonest first, in the admin time zone.
+     *
+     * Dates already due are left out: the "apply" job handles them within a minute and reports its failures.
+     *
+     * @return string[]
+     */
+    private function lines(): array
     {
         $now = gmdate('Y-m-d H:i:s');
         $until = gmdate('Y-m-d H:i:s', time() + 86400);
@@ -67,6 +80,6 @@ class Remind
             }
         }
         usort($lines, fn (array $a, array $b): int => $a[0] <=> $b[0]);
-        $this->notifier->remind(array_column($lines, 1));
+        return array_column($lines, 1);
     }
 }

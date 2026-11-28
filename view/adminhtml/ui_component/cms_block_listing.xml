@@ -3,6 +3,13 @@
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <listingToolbar name="listing_top">
         <massaction name="listing_massaction">
+            <action name="schedule">
+                <settings>
+                    <url path="mageos_schedule/schedule/massSchedule"/>
+                    <type>schedule</type>
+                    <label translate="true">Schedule</label>
+                </settings>
+            </action>
             <action name="cancel_schedule">
                 <settings>
                     <confirm>

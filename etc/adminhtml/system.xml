@@ -70,6 +70,12 @@
                         <field id="remind">1</field>
                     </depends>
                 </field>
+                <field id="log_days" translate="label comment" type="text" sortOrder="80" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Keep Log For (Days)</label>
+                    <comment>Entries of Content > Elements > Content Schedule Log older than this are deleted every night. 0 keeps them forever.</comment>
+                    <validate>validate-digits</validate>
+                </field>
             </group>
         </section>
     </system>

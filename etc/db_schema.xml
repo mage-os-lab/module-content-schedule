@@ -10,4 +10,21 @@
         <column xsi:type="datetime" name="publish_at" nullable="true" comment="Enable at (UTC)"/>
         <column xsi:type="datetime" name="unpublish_at" nullable="true" comment="Disable at (UTC)"/>
     </table>
+    <table name="mageos_content_schedule_log" resource="default" engine="innodb" comment="Content schedule log">
+        <column xsi:type="int" name="log_id" unsigned="true" nullable="false" identity="true" comment="Log ID"/>
+        <column xsi:type="datetime" name="created_at" nullable="false" comment="Applied at (UTC)"/>
+        <column xsi:type="varchar" name="source" length="16" nullable="false" comment="cron or cli"/>
+        <column xsi:type="varchar" name="entity_type" length="16" nullable="false" comment="page or block"/>
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" comment="Page or block ID"/>
+        <column xsi:type="varchar" name="title" length="255" nullable="true" comment="Title at the time"/>
+        <column xsi:type="varchar" name="action" length="16" nullable="true" comment="publish or unpublish"/>
+        <column xsi:type="varchar" name="result" length="16" nullable="false" comment="success or failure"/>
+        <column xsi:type="text" name="message" nullable="true" comment="Error message"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="log_id"/>
+        </constraint>
+        <index referenceId="MAGEOS_CONTENT_SCHEDULE_LOG_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
+    </table>
 </schema>

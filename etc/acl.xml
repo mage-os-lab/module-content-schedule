@@ -8,6 +8,8 @@
                     <resource id="Magento_Backend::content_elements">
                         <resource id="MageOS_ContentSchedule::upcoming" title="Scheduled Content"
                                   translate="title" sortOrder="35"/>
+                        <resource id="MageOS_ContentSchedule::log" title="Content Schedule Log"
+                                  translate="title" sortOrder="36"/>
                     </resource>
                 </resource>
             </resource>

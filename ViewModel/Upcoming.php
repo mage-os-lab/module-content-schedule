@@ -15,6 +15,9 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 /**
  * Rows of the "Scheduled Content" page: one per date still to apply, soonest first.
+ *
+ * @deprecated 1.3.0 The page is now a UI grid with filters and paging; kept for layouts that used it.
+ * @see \MageOS\ContentSchedule\Model\ResourceModel\Upcoming\Collection
  */
 class Upcoming implements ArgumentInterface
 {

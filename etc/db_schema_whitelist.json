@@ -11,5 +11,24 @@
             "publish_at": true,
             "unpublish_at": true
         }
+    },
+    "mageos_content_schedule_log": {
+        "column": {
+            "log_id": true,
+            "created_at": true,
+            "source": true,
+            "entity_type": true,
+            "entity_id": true,
+            "title": true,
+            "action": true,
+            "result": true,
+            "message": true
+        },
+        "index": {
+            "MAGEOS_CONTENT_SCHEDULE_LOG_CREATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
     }
 }

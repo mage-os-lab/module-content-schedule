@@ -145,6 +145,29 @@ class ApplyTest extends TestCase
     }
 
     /**
+     * The publication is logged with the page, the action, the result and the cron as the one who ran it.
+     */
+    #[DataFixture(PageFixture::class, ['active' => false, 'title' => 'Logged sale'], 'page')]
+    public function testAppliedDateIsLogged(): void
+    {
+        $pageId = $this->schedule('publish_at');
+
+        Bootstrap::getObjectManager()->get(Apply::class)->execute();
+
+        $resource = Bootstrap::getObjectManager()->get(ResourceConnection::class);
+        $row = $resource->getConnection()->fetchRow(
+            $resource->getConnection()->select()
+                ->from($resource->getTableName('mageos_content_schedule_log'))
+                ->where('entity_type = ?', 'page')
+                ->where('entity_id = ?', $pageId)
+        );
+        $this->assertSame('Logged sale', $row['title']);
+        $this->assertSame('publish', $row['action']);
+        $this->assertSame('success', $row['result']);
+        $this->assertSame('cron', $row['source']);
+    }
+
+    /**
      * Notifying on: one summary e-mail lists the published page.
      */
     #[

@@ -1,0 +1,48 @@
+<?php
+/**
+ * "Schedule" mass action of the CMS grids: the dates to set on the selected items.
+ *
+ * @var \Magento\Backend\Block\Template $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+$isBlock = $block->getData('namespace') === 'cms_block_listing';
+$note = __('In the admin time zone. A date left empty keeps the current one of each item.');
+$gridUrl = $block->getUrl($isBlock ? 'cms/block/' : 'cms/page/');
+?>
+<form method="post" action="<?= $escaper->escapeUrl($block->getUrl('mageos_schedule/schedule/save')) ?>">
+    <input type="hidden" name="form_key" value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>"/>
+    <input type="hidden" name="namespace" value="<?= $escaper->escapeHtmlAttr($block->getData('namespace')) ?>"/>
+    <input type="hidden" name="ids" value="<?= $escaper->escapeHtmlAttr($block->getData('ids')) ?>"/>
+    <fieldset class="admin__fieldset">
+        <div class="admin__field">
+            <label class="admin__field-label" for="mageos-schedule-publish-at">
+                <span><?= $escaper->escapeHtml(__('Publish at')) ?></span>
+            </label>
+            <div class="admin__field-control">
+                <input class="admin__control-text" type="datetime-local" id="mageos-schedule-publish-at"
+                       name="publish_at"/>
+            </div>
+        </div>
+        <div class="admin__field">
+            <label class="admin__field-label" for="mageos-schedule-unpublish-at">
+                <span><?= $escaper->escapeHtml(__('Unpublish at')) ?></span>
+            </label>
+            <div class="admin__field-control">
+                <input class="admin__control-text" type="datetime-local" id="mageos-schedule-unpublish-at"
+                       name="unpublish_at"/>
+                <div class="admin__field-note">
+                    <?= $escaper->escapeHtml($note) ?>
+                </div>
+            </div>
+        </div>
+        <div class="admin__field">
+            <div class="admin__field-control">
+                <button type="submit" class="action-primary"><?= $escaper->escapeHtml(__('Schedule')) ?></button>
+                <a class="action-secondary" href="<?= $escaper->escapeUrl($gridUrl) ?>">
+                    <?= $escaper->escapeHtml(__('Back')) ?>
+                </a>
+            </div>
+        </div>
+    </fieldset>
+</form>

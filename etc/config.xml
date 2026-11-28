@@ -10,6 +10,7 @@
                 <notify_identity>general</notify_identity>
                 <notify_template>cms_mageos_content_schedule_notify_template</notify_template>
                 <remind>0</remind>
+                <log_days>90</log_days>
                 <remind_template>cms_mageos_content_schedule_remind_template</remind_template>
             </mageos_content_schedule>
         </cms>
